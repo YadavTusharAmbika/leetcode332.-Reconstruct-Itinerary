@@ -1,0 +1,99 @@
+the below code is in C++
+
+class Solution {
+public:
+unordered_map<string, vector<string>> adj;
+vector<string> route;
+int numTickets=0;
+//Approach-1 (Using adj of string to vector and sorting it)
+//T.C : O(V^2)
+
+
+
+
+ // below code is also giving answer but the TLE is over exceeded
+//bool DFS(string fromAirport, vector <string>&temp){
+    // result me value daalna tha and result me kiska value milega path(temp) ka aur vector<string> ka
+
+  //  temp.push_back(fromAirport);
+    // agar true nhi mila toh back track hoga 
+
+    //if(temp.size() ==numTickets+1){
+      //  route =temp;
+        //return true;
+        // agar path(temp) size equal raha ticket kew toh simple 
+        //hamko path(temp) and result mil jayega
+          //You have already found the route (first valid lexicographically path)
+    //}
+    // ab neighbors ko iterate marna hai 
+    //vector<string>& neighbors=adj[fromAirport];
+    //for (int i =0;i<neighbors.size();i++){
+      //  string toAirport = neighbors[i];
+        // neighbors ka i th index wala banda 
+        //remove kar do abhi ke liye taki cycle se bach sako 
+        //like jfk se atl gye to wapas to jfk nhi aaoge 
+        //phir jfk se atl to cycle me phas gye na n
+        // hamko sara ticekt and path se jaana hai 
+        // like  jfk =atl,sfo yaha remove atl 
+        // atl=jfk , sfo remove jfk 
+        //sfo = atl 
+         // remove ticket(route) from graph so that it won't be reused 
+        //   neighbors.erase(neighbors.begin()+i);
+        //if (DFS(toAirport,temp)== true )
+        //return true ;
+        //agar ans nhi aaya toh push back karo like
+        //path.push_back(fromAirport);
+        //neighbors.insert(neighbors.begin()+i,toAirport); 
+            // if the current path(temp) is invalid, restore the current ticket
+
+
+    //}
+
+    //agar pure upar loop me kahi bhi true nhi aaya toh 
+    //temp.pop_back();
+    //return false;
+
+
+//}
+void DFS(string fromAirport) {
+    auto &neighbors = adj[fromAirport];
+    while(!neighbors.empty()) {
+        string toAirport = neighbors.back();
+        neighbors.pop_back();
+        DFS(toAirport);
+    }
+    route.push_back(fromAirport);
+}
+
+
+
+    vector<string> findItinerary(vector<vector<string>>& tickets) {
+        numTickets= tickets.size();
+
+        for(auto &t :tickets) {
+            string u =t[0];
+            string v =t[1];
+            // hame diya hai qs me u se v ka ticket de rakha hai 
+            adj[u].push_back(v);
+
+        }
+        //sorting for lexical order
+        //lexical means smallest path ko 
+        // Sort vertices in the adjacency list by lexical order
+        for(auto &edges : adj){
+            //map me se traverse marega 
+            
+            sort(edges.second.rbegin(), edges.second.rend());
+
+            //edges me 2 cheeze hoti hai keys and values 
+            //(edges.second) issme vector<string>hoga ussko sort kar rahe hai lexically 
+
+        }
+        DFS("JFK");
+        reverse(route.begin(), route.end());// aaisa path lege jisme sab path bante chalege 
+        return route;
+
+        
+        
+    }
+};
